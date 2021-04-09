@@ -1,0 +1,3 @@
+John Doe;john.doe@foo.com;20000001
+Jane Doe;jane.doe@bar.co.uk;20000002
+Mickey Mouse;mmouse@disney.com;20000003

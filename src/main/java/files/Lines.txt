@@ -1,0 +1,4 @@
+Subway;Subway;Coconut;Grape;Raspberry;Apple;Guava;Watermelon
+Bus;Line One;Apple;Banana;Peach;Orange
+Bus;Line Two;Pear;Lemon;Watermelon;Kiwi;Peach;Lime
+Bus;Line Three;Avocado;Grapefruit;Mango;Pineapple;Apple

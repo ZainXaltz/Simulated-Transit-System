@@ -1,0 +1,12 @@
+100000000, enter, Coconut, Subway, 2020-11-11-10:00:00
+100000000, exit, Watermelon, Subway, 2020-11-11-10:05:00
+100000000, tap, Watermelon, Line Two, 2020-11-11-10:05:40
+100000000, tap, Peach, Line Two, 2020-11-11-10:12:10
+100000000, tap, Peach, Line One, 2020-11-11-10:45:05
+100000000, tap, Orange, Line One, 2020-11-11-11:05:20
+100000000, enter, Coconut, Subway, 2020-11-12-10:00:00
+100000000, exit, Watermelon, Subway, 2020-11-12-10:05:00
+100000000, tap, Watermelon, Line Two, 2020-11-12-10:05:40
+100000000, tap, Peach, Line Two, 2020-11-12-10:12:10
+100000000, tap, Peach, Line One, 2020-11-12-12:40:05
+100000000, tap, Orange, Line One, 2020-11-12-12:55:20

@@ -1,0 +1,235 @@
+=====
+ADD INSTRUCTIONS FOR HOW TO RUN/USE YOUR PROGRAM HERE:
+e.g. What format should we use to input data or add data to events.txt? Anything else we need to know in order to use your program?
+=====
+This program runs on Java 8 and requires JavaFX.
+
+
+Note: all input to the program is case-sensitive
+
+Entering Events
+=====
+the data in events.txt should follow the following format:
+<card id>, <action>, <stop>, <line>, <time>
+where action is one of "enter" or "exit" for taps at subway stations
+                or "tap" for an event on a bus
+time is the timestamp of the event in the format yyyy-mm-dd-hh:mm:ss all numeric and in 24 hr time
+e.g. 102, enter, Broadway, subway, 2020-04-22-14:30:00
+	 4, tap, First Street, Red Line, 2020-11-03-09:05:10
+
+
+Entering Transit Lines
+=====
+the transit lines are entered in files/Lines.txt with the following format:
+<type>;<line name>;<stop name>;<stop name>;...<stop name>
+where type is either "Subway" or "Bus"
+Notes about stops and lines:
+- all line and stop names are case-sensitive
+- a line may not contain two stops with the same name
+- any stops with the same name on different lines are transfers
+
+An example Lines.txt:
+Subway;Subway;Apple;Banana;Peach;Orange
+Bus;Line One;Pear;Lemon;Peach;Lime;Kiwi
+Bus;Line Two;Coconut;Grape;Apple;Watermelon;Raspberry
+
+Entering Riders
+=====
+The riders that the system will initialize with are located in files/Riders.txt
+Each line is a rider with the format <name>;<email>;<id>
+
+Example:
+John Doe;john.doe@foo.com;200000001
+Jane Doe;jane.doe@bar.co.uk;200000002
+Mickey Mouse;mmouse@disney.com;200000003
+
+Entering Cards
+=====
+The cards that the system will initialize with are located in files/Cards.txt
+Each line is a card with the format <RiderID>;<CardID> OR <RiderID>;<CardID>;<Balance>
+
+Example:
+200000001;100000001
+200000002;100000002;1232.2
+200000002;100000003;9.4
+
+Entering ID's
+=====
+Proper format of ID's consist of the primary digit: "1" or "2" representing the type of the ID. "1" represents Card
+objects, "2" represents Rider objects. remaining 8 digits are a combination of numbers used to represent the object.
+
+Example:
+    Card object ID:
+    [100230450]
+    Rider object ID:
+    [202304408]
+
+=====
+LIST ALL FEATURES THAT YOU WORKED ON HERE, AND HOW TO INPUT RELEVANT DATA FOR THE FEATURE (IF APPLICABLE)
+=====
+
+FEATURE 1
+
+Description: Tapping a card at a station
+
+Usage Instructions: Tap events are processed from the events.txt file located in the files/ subdirectory. Each line in the file is an event of the format
+<card id>, <action>, <stop>, <line>, <time> where:
+Card id: is the unique id of the card in the system which has been tapped
+Action: is either “enter” or “exit” for a tap in the subway or “tap” for an event on the bus
+Stop: is the name of the stop at which the tap occurred
+Line: is the name of the transit line in the system on which the tap occurred
+Time: is of the format yyyy-mm-dd-hh:mm:ss in 24 hour time
+
+Design Decisions: Separating the logic to process events and charge users allows for swappable logic. By using encapsulation and the idea of single responsibility, the logic for how, how much, and when users are charged can be changed without touching the logic for parsing events into trips. Fares are calculated and collected automatically when a user taps their card.
+
+
+FEATURE 2
+
+Description: Automatically generated map of the transit network. This includes accurate visualization of transfer stops, line names, and an interactive component where hovering over the map will display the name of the stop being hovered over.
+
+Usage Instructions: The map will appear when the application is run
+
+Design Decisions: Map generation uses GUI techniques and event handling to create a randomly generated and interactive map of the transit system. Event handling is used to keep track of mouse movement events to update the current stop label and to re-generate the map when the user clicks a button. 
+
+
+FEATURE 3
+
+Description: Admins can easily input the geometry of the transit network through plaintext. 
+
+Usage Instructions: The lines and stops in the network are read in from files/Lines.txt where each line in the file is a transit line in the network. They are of the format 
+<type>;<line name>;<stop name>;<stop name>;...<stop name>
+Where type is either Bus or Subway.
+
+Design Decisions: No two stops on a given line may have the same name. This is so riders are not confused when trying to navigate the transit network. OOP principles such as inheritance are used to reduce code footprint between different kinds of stops and lines in the network.
+
+
+FEATURE 4
+
+Description: Automatic transfer inference. 
+
+Design Decisions: Stops which have transfers to other lines are automatically inferred by the system based on the name of each stop. It was decided that two stops on different lines with the same name are transfers. 
+
+
+FEATURE 5
+
+Description: Admins can input a user base into the system by simply editing a text file
+
+Usage Instructions: Before running the app, edit the files/Riders.txt file to add any users to the system. Each line in the file is a user with the format <name>;<email>;<id>
+Where id is of the format 2xxxxxxxx, and the blanks are the sequential ID of the rider.
+
+For example:
+John Doe;john.doe@foo.com;200000001
+Jane Doe;jane.doe@bar.co.uk;200000002
+Mickey Mouse;mmouse@disney.com;200000003
+
+Design Decisions: Having users parsed from a text file on system startup ensures that a non-volatile ledger of users can exist. This makes it so that no code must be written to initialize the system with a pre-existing list of users. 
+
+
+FEATURE 6
+
+Description: Ride fares for a single 2hr trip through the system are capped at $6
+
+Usage Instructions: This happens automatically as riders tap into and out of the system
+
+Design Decisions: OOP principles such as composition allow for easy transfer of data about events in the system. Because events, transit cards, and trips all have references to one another, trip management is easy and extensible. Keeping and managing trip objects allows for the system to keep an active record of all the events processed through it, organized by rider.
+
+FEATURE 7
+
+Description: Extensible logger allows for formatted feedback to the user
+
+Design Decisions: A Logger object was made in favor of simply using print statements so that functionality may be easily swapped and extended for any use case. This allows for consistent formatting of messages across the application. Since all messages to the user are directed through one central method, the output location and format can be easily changed by simply swapping one line of code.
+
+
+FEATURE 8
+
+Description: A rider may view summary data of their 3 most recent trips
+
+Usage Instructions: A demo of this functionality runs in the app
+
+Design Decisions: Like several features, this functionality must be used through adding code to the main routine of the application. This is intentional as these user-specific capabilities should be accessed through a kiosk in a station rather than through the computer on which the system is running. However, a simple method call is all that is required to hook this functionality into any UI solution the customer chooses. 
+
+
+FEATURE 9
+
+Description: A rider can view their average monthly transit cost
+
+Usage instructions: A demo of this functionality runs in the app
+
+Design Decisions: This is another feature which is only usable through calling a specific method. All the needed logic is in place, however it does not make sense for this to be called by any means through the system. Instead the functionality exists and is simple to hook into any UI solution through a simple method call.
+
+
+FEATURE 10
+
+Description: A rider may suspend and reactivate any of their transit cards
+
+Design Decisions: The logic for these actions exist in the Rider.suspendCard() and Rider.reActivateCard() methods, However they should be accessed through a UI in a kiosk at a station and not through the system directly so the decision has been made to not include any sort of input to perform these actions. These methods are, however, authenticated with the user’s ID. This ensures that only the owner of a card may suspend or activate it.
+
+
+FEATURE 11
+
+Description: A rider can add $10, $20, or $50 to their card at a time
+
+Usage: A call can be made to Rider.reloadCard() with the desired amount and card to add the balance to
+
+Design Decisions: This logic is demonstrated in the application but we have intentionally not provided a way to initiate these actions in the system since it does not make sense. 
+
+
+FEATURE 12
+
+Description: A user may change their name
+
+Usage: A call can be made to the Rider.changeName method with the desired name. Demos have been included in the app.
+
+Design Decisions: This logic, like several previous methods, is easy to call and tie into any UI. A user may not change their name to a string containing non-letter characters or an empty string. Regular expressions are used to create rules for what a valid name is so that the check can be easily edited to match for any specific rule the client may need.
+
+
+FEATURE 13
+
+Description: A rider may be issued a new transit card at any time with a starting balance of $19
+
+Usage: The system reads all card issuances and balances from the files/Cards.txt file on startup. Each line is a transit card of the form:
+<rider id>;<card id> or <rider id>;<card id>;<balance>
+Note: card ids must be sequential.
+E.g.
+200000001;100000000
+200000002;100000001;5
+
+Design Decisions: Cards are issued with a reference to their bearer so that they cannot be transferred illegally. By parsing a text file on startup, the system is easy to edit by an admin and has a non-volatile record of transit cards.
+
+
+FEATURE 14
+
+Description: The system admin can collect and view useful statistics
+
+Usage: A call to Admin.getFareOnDate() or Admin.getStopsOnDate() can be hooked into a UI easily to fetch statistics for the admin. A demo of the functionality can be seen in the app.
+
+Design Decisions: The Admin user uses the Observer-Observable recipe to collect statistics about the transit network in a passive and highly extensible way. More statistics can be easily gathered by adding new notifications to the observer. This implementation makes it so that collection of data on the transit network is pluggable. Simply swapping or adding to the logic in the admin observer will extend the functionality of the metric collection tools available. An admin is also not limited to fetching statistics for today. The admin may specify the date for which they would like to see stats.
+
+
+FEATURE 15
+
+Description: Custom UID generators
+
+Design Decisions: A custom generator is used to keep track of existing IDs and apply IDs to new transit cards and riders. This allows for an easy to recognize ID scheme (where user IDs start with 1s and cards start with 2s). This is extensible and can be easily made to include any other entities which the system might need later. The IDGenerator uses the factory design pattern in order to keep track of all currently used IDs as well as helper functions.
+
+
+FEATURE 16
+
+Description: The system declines a user if their tap is invalid
+
+Design Decisions: If the user does not have enough money to complete an action, their card is suspended, or the system cannot track them (e.g. they tap out of a subway line without having tapped in), the system displays an error message and does not add the failed event to a trip.
+
+======
+
+Note: If you have design decisions that don't fit under a specific feature, but are instead relevant to multiple features, feel free to include them at the bottom of this file here.
+
+OTHER NOTES
+The entire system follows OOP principles such as encapsulation, composition, inheritance, and polymorphism in order to make the codebase extensible.
+
+
+
+
+
+
+
+
